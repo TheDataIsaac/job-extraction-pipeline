@@ -14,8 +14,10 @@ def check(extraction: JobExtraction, posting_text: str) -> list[str]:
     text = _normalise(posting_text)
     problems = []
 
-    quoted = {e.field for e in extraction.evidence}
-    for item in extraction.evidence:
+    # A blank quote would always match ("" is in every string), so it is treated as no quote.
+    evidence = [e for e in extraction.evidence if e.quote.strip()]
+    quoted = {e.field for e in evidence}
+    for item in evidence:
         if _normalise(item.quote) not in text:
             problems.append(f"quote for {item.field} is not in the posting")
 
@@ -30,10 +32,11 @@ def check(extraction: JobExtraction, posting_text: str) -> list[str]:
         if claimed and field not in quoted:
             problems.append(f"{field} has no supporting quote")
 
-    # The budget has to appear in the text, digits included.
+    # The budget has to appear in the text, digits included. Each number must match whole,
+    # with no digit right before or after it, so "15" does not match inside "150".
     if extraction.stated_budget:
         digits = re.findall(r"\d+", extraction.stated_budget)
-        if digits and not all(d in text for d in digits):
+        if digits and not all(re.search(rf"(?<!\d){d}(?!\d)", text) for d in digits):
             problems.append("stated_budget numbers are not in the posting")
 
     return problems
