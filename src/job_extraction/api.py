@@ -1,9 +1,9 @@
 """A small web API: send a posting, get structured data back."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from job_extraction.extract import Extractor, Settings
+from job_extraction.extract import EmptyReply, Extractor, Settings
 from job_extraction.schema import JobExtraction
 from job_extraction.verify import check
 
@@ -23,5 +23,8 @@ class ExtractionOut(BaseModel):
 
 @app.post("/extract", response_model=ExtractionOut)
 async def extract(posting: PostingIn) -> ExtractionOut:
-    data, _ = await extractor.extract(posting.title, posting.description)
+    try:
+        data, _ = await extractor.extract(posting.title, posting.description)
+    except EmptyReply:
+        raise HTTPException(status_code=502, detail="The model gave no usable answer.")
     return ExtractionOut(data=data, problems=check(data, posting.title + " " + posting.description))

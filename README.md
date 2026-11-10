@@ -17,7 +17,7 @@ raw CSV --prepare--> postings.jsonl --extract--> extractions.jsonl --analyze--> 
 |---|---|
 | `schema.py` | The shape of the answer: project type, tools, experience level, deadline, budget, red flags. The model must fill this in. |
 | `prepare.py` | Fixes broken characters and removes exact duplicate postings. |
-| `extract.py` | Sends each posting to the model, 10 at a time, retries temporary errors, and saves each result as it arrives so a stopped run can resume. |
+| `extract.py` | Sends each posting to the model, 10 at a time, retries temporary errors, and saves each result as it arrives so a stopped run can resume. A posting is redone if its text, the model, the prompt or the schema has changed, and the old result moves to `extractions.old.jsonl`. Results saved before this check was added stay as they are. |
 | `verify.py` | Checks every claim against the posting. No second model call. |
 | `analyze.py` | Counts and charts the results. |
 | `api.py` | A small FastAPI service: `POST /extract` with one posting. |
