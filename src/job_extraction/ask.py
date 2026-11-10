@@ -43,8 +43,12 @@ class Asker:
         self.client = OpenAI(api_key=Settings().openai_api_key)
         self.model = Settings().llm_model
         self.postings = [json.loads(line) for line in postings_file.open(encoding="utf-8")]
+        # Keep facts only from extractions that passed every check. A posting without facts
+        # still reaches the model through its own text.
         extractions = (json.loads(line) for line in extractions_file.open(encoding="utf-8"))
-        self.facts = {record["id"]: record["data"] for record in extractions}
+        self.facts = {
+            record["id"]: record["data"] for record in extractions if not record["problems"]
+        }
         vectors = np.load(EMBEDDINGS)
         self.vectors = vectors / np.linalg.norm(
             vectors, axis=1, keepdims=True
@@ -63,12 +67,14 @@ class Asker:
         found = self.retrieve(question, k)
         blocks = []
         for number, posting in enumerate(found, 1):
-            facts = self.facts[posting["id"]]
-            blocks.append(
-                f"[{number}] {posting['title']}\n{posting['description'][:700]}\n"
-                f"(extracted: {facts['project_type']}, tools {facts['tools']}, budget {facts['stated_budget']}, "
-                f"timeline {facts['timeline_days']} days)"
-            )
+            block = f"[{number}] {posting['title']}\n{posting['description'][:700]}"
+            facts = self.facts.get(posting["id"])
+            if facts:
+                block += (
+                    f"\n(extracted: {facts['project_type']}, tools {facts['tools']}, budget {facts['stated_budget']}, "
+                    f"timeline {facts['timeline_days']} days)"
+                )
+            blocks.append(block)
         response = self.client.responses.create(
             model=self.model,
             reasoning={"effort": "none"},

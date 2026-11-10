@@ -55,7 +55,8 @@ A full run is about 8 million tokens and takes about 40 minutes.
 
 `jobs ask` retrieves the 8 postings closest in meaning to your question and gives them to the model, which answers only
 from them and cites each by number. It sees 8 postings, not all 8,595, so it describes examples. It cannot give totals;
-the analysis step does that.
+the analysis step does that. Extracted facts that failed a check are left out, so the model reads that posting's own
+text instead.
 
 ## Limits
 
