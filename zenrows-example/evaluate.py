@@ -1,12 +1,14 @@
 """Measure how often the extraction gets a job's location right.
 
 Compares the model's records with the true answers in labels.csv, which come from reading each
-posting. Two simple filters that only read the location label are scored the same way, for
-comparison. Prints the results and saves them to evaluation_report.md.
+posting. The Nigeria answer is scored twice, with report.py's filter and with a version that also
+reads the time zone. Two simple filters that only read the location label are scored the same
+way, for comparison. Prints the results and saves them to evaluation_report.md.
 """
 
 import csv
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -30,6 +32,27 @@ def label_names_a_place(location_label: str) -> bool:
     looked for in the label instead of in the model's answers."""
     label = location_label.lower()
     return any(word in label for word in INCLUDES_NIGERIA)
+
+
+def timezone_includes_nigeria(required_timezone: str | None) -> bool:
+    """True if a band like "GMT +2 to GMT -8" includes Nigeria's GMT +1.
+    A plain "GMT" counts as GMT 0. Anything without GMT or UTC numbers ("US Pacific") is False,
+    because it can't be checked."""
+    offsets = re.findall(r"(?:GMT|UTC)\s*([+-]\s*\d+)?", required_timezone or "")
+    if not offsets:
+        return False
+    hours = [int(offset.replace(" ", "")) if offset else 0 for offset in offsets]
+    return min(hours) <= 1 <= max(hours)
+
+
+def open_from_nigeria_with_timezone(data: dict) -> bool:
+    """report.py's filter, plus one change: when the places don't include Nigeria, a time-zone
+    band that includes GMT +1 counts as a yes. report.py's filter never reads the time zone."""
+    if open_from_nigeria(data):
+        return True
+    if data["remote_scope"] in ("regions", "countries"):
+        return timezone_includes_nigeria(data["required_timezone"])
+    return False
 
 
 def yes_no(answer: bool) -> str:
@@ -101,9 +124,11 @@ def main() -> None:
     true_yes = sum(labels[i]["open_from_nigeria"] == "yes" for i in decided)
     schema = {i: yes_no(open_from_nigeria(records[i]["data"])) for i in ids}
     nigeria_wrong = {i for i in decided if schema[i] != labels[i]["open_from_nigeria"]}
+    with_timezone = {i: yes_no(open_from_nigeria_with_timezone(records[i]["data"])) for i in ids}
     # Each way of answering, scored on the same postings.
     answers = {
         "Schema filter (`open_from_nigeria` in report.py)": schema,
+        "Schema filter that also reads the time zone": with_timezone,
         'Baseline 1: "remote" or "worldwide" in the location label': {
             i: yes_no(label_says_remote(labels[i]["location_label"])) for i in ids
         },
@@ -145,6 +170,7 @@ def main() -> None:
             f"- Location label: {label['location_label']}",
             f"- remote_scope: model `{data['remote_scope']}`, true `{label['remote_scope']}`",
             f"- Nigeria: model {schema[i]}, true {label['open_from_nigeria']}",
+            f"- Nigeria with the time zone read: model {with_timezone[i]}",
             f"- Places: model {model_places}, true {label['places'] or 'none'}",
             f'- The model quoted for remote_scope: "{scope_quote}"',
             f'- The model quoted for places: "{places_quote}"',

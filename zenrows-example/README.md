@@ -40,6 +40,11 @@ compares the model's answers with true answers taken from reading each posting (
 It scores two things: `remote_scope`, and the decision that matters, whether someone living in
 Nigeria can apply.
 
+The Nigeria answer is scored twice: with `report.py`'s filter, and with a version that also reads
+the time zone (a band like "GMT +2 to GMT -8" that includes GMT +1 counts as a yes). The second
+version was written after seeing the first one's misses on these same 50 postings, so its score
+here is a best case. A fresh set of postings would be the fair test.
+
 For comparison, it scores two filters that only read the location label: one that looks for
 "remote" or "worldwide" (roughly what a job board's remote filter does), and one that looks for
 the same place words `report.py` uses (EMEA, Africa, Nigeria, worldwide, anywhere).

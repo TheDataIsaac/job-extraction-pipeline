@@ -1,8 +1,6 @@
 # Location evaluation
 
-50 postings. 0 of 50 labels confirmed by Isaac.
-
-**Provisional: scored against suggested labels, not yet reviewed by Isaac.**
+50 postings. 50 of 50 labels confirmed by Isaac.
 
 ## remote_scope
 
@@ -23,6 +21,7 @@ Rows are the true answer, columns are the model's answer.
 48 postings are labelled yes or no (10 yes, 38 no). 2 are labelled unclear and left out.
 
 - Schema filter (`open_from_nigeria` in report.py): 46 of 48 (96%)
+- Schema filter that also reads the time zone: 48 of 48 (100%)
 - Baseline 1: "remote" or "worldwide" in the location label: 30 of 48 (62%)
 - Baseline 2: report.py's place words in the location label: 46 of 48 (96%)
 - For scale: answering "no" every time: 38 of 48 (79%)
@@ -40,11 +39,12 @@ Rows are the true answer, columns are the model's answer.
 - Location label: Remote
 - remote_scope: model `regions`, true `regions`
 - Nigeria: model no, true yes
-- Places: model EU, US, true GMT +2 to GMT -8 (EU and US time zones)
+- Nigeria with the time zone read: model yes
+- Places: model EU, US, true none
 - The model quoted for remote_scope: "Remote"
 - The model quoted for places: "We provide support across EU and US time zones, and we're hiring in both."
 - Check problems: none
-- Label note: Limited by time zone only, no countries named, so regions under the rules. Nigeria (GMT +1) is inside GMT +2 to GMT -8.
+- Label note: Limited by time zone only, so regions under the rules. GMT +1 (Nigeria) is inside GMT +2 to GMT -8, so yes. The EU and US mention is about time zones, not places.
 
 ### posthog-product-manager-observability-(ex-founder-or-ex-product-engineer)
 
@@ -52,11 +52,12 @@ Rows are the true answer, columns are the model's answer.
 - Location label: Remote
 - remote_scope: model `regions`, true `regions`
 - Nigeria: model no, true yes
-- Places: model GMT +2 to GMT -8, true GMT +2 to GMT -8
+- Nigeria with the time zone read: model yes
+- Places: model GMT +2 to GMT -8, true none
 - The model quoted for remote_scope: "Remote"
 - The model quoted for places: "GMT +2 to GMT -8"
 - Check problems: none
-- Label note: Limited by time zone only, so regions under the rules. Nigeria (GMT +1) is inside the range.
+- Label note: Limited by time zone only, so regions under the rules. GMT +1 (Nigeria) is inside GMT +2 to GMT -8, so yes.
 
 ### airbnb-8351513
 
@@ -64,6 +65,7 @@ Rows are the true answer, columns are the model's answer.
 - Location label: Singapore
 - remote_scope: model `countries`, true `hybrid_or_office`
 - Nigeria: model no, true no
+- Nigeria with the time zone read: model no
 - Places: model Singapore, true Singapore
 - The model quoted for remote_scope: "Offices: Singapore, Singapore"
 - The model quoted for places: "Offices: Singapore, Singapore"
@@ -76,6 +78,7 @@ Rows are the true answer, columns are the model's answer.
 - Location label: Mexico City, Mexico
 - remote_scope: model `countries`, true `hybrid_or_office`
 - Nigeria: model no, true no
+- Nigeria with the time zone read: model no
 - Places: model Mexico, true Mexico City, Mexico
 - The model quoted for remote_scope: "Offices: Mexico"
 - The model quoted for places: "Offices: Mexico"
@@ -88,7 +91,8 @@ Rows are the true answer, columns are the model's answer.
 - Location label: USA, CA, Virtual Location - California; USA, TX, Virtual Location - Texas; USA, AZ, Virtual Location - Arizona; USA, GA, Virtual Location - Georgia; USA, MA, Virtual Location - Massachuset; USA, NH, Virtual Location - New Hampshi; USA, WA, Virtual Location - Washington; USA, CO, Virtual Location - Colorado; USA, VA, Virtual Location - Virginia; USA, NC, Virtual Location - N Carolina
 - remote_scope: model `regions`, true `countries`
 - Nigeria: model no, true no
-- Places: model USA, AZ, Virtual Location - Arizona, USA, CA, Virtual Location - California, USA, CO, Virtual Location - Colorado, USA, GA, Virtual Location - Georgia, USA, MA, Virtual Location - Massachuset, USA, NC, Virtual Location - N Carolina, USA, NH, Virtual Location - New Hampshi, USA, TX, Virtual Location - Texas, USA, VA, Virtual Location - Virginia, USA, WA, Virtual Location - Washington, true United States (10 named states)
+- Nigeria with the time zone read: model no
+- Places: model USA, AZ, Virtual Location - Arizona, USA, CA, Virtual Location - California, USA, CO, Virtual Location - Colorado, USA, GA, Virtual Location - Georgia, USA, MA, Virtual Location - Massachuset, USA, NC, Virtual Location - N Carolina, USA, NH, Virtual Location - New Hampshi, USA, TX, Virtual Location - Texas, USA, VA, Virtual Location - Virginia, USA, WA, Virtual Location - Washington, true California; Texas; Arizona; Georgia; Massachusetts; New Hampshire; Washington; Colorado; Virginia; North Carolina
 - The model quoted for remote_scope: "USA, AZ, Virtual Location - Arizona - 68,700.00 - 92,700.00 USD annually"
 - The model quoted for places: "USA, CA, Virtual Location - California"
 - Check problems: none
@@ -96,5 +100,5 @@ Rows are the true answer, columns are the model's answer.
 
 ## Labelled unclear (2)
 
-- atlassian-27203: the schema filter says no. Remote, but only in countries where Atlassian has a legal entity, and the posting doesn't list them. I don't believe Atlassian has one in Nigeria, but the posting alone doesn't settle it.
-- atlassian-27390: the schema filter says no. Same legal-entity rule. The pay and team point to India, but the page only says Remote.
+- atlassian-27203: the schema filter says no. Remote, but only in countries where Atlassian has a legal entity, and the posting doesn't name them. The office city before "Remote" isn't a limit on remote work.
+- atlassian-27390: the schema filter says no. Remote, but only in countries where Atlassian has a legal entity, and the posting doesn't name them. The office city before "Remote" isn't a limit on remote work.
