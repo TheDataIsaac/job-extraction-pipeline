@@ -62,13 +62,20 @@ confirmed, the report says its numbers are provisional.
 
 ### How the labels are decided
 
+I drafted the labels with an LLM's help, a second model labelled all 50 again without seeing
+them (they agreed on the Nigeria answer for all 50 and on `remote_scope` for 48), and I settled
+the two disagreements and reviewed the rest. These are the rules all three followed.
+
 - Go by the posting page only, not the listing page or what you know about the company. Ignore
   footers and region pickers.
 - `location_label` is the location line on the posting page, copied as written.
 - `anywhere`: any country, with no limit. `regions`: remote, but only from named regions (EMEA,
   the Americas) or from a band of time zones with no countries named. `countries`: remote, but
-  only from named countries or states. `hybrid_or_office`: regular office time, or the page names
+  only from named countries or states, or from countries the posting limits but doesn't name
+  (`places` stays empty then). `hybrid_or_office`: regular office time, or the page names
   only an office city.
 - Remote in a region or an office: remote wins, so `regions` or `countries`.
 - `open_from_nigeria`: could someone living in Nigeria (GMT +1) do the job from there, going by
   the posting? `unclear` when the posting doesn't settle it.
+- When the only limit is a band of time zones, Nigeria counts as in if GMT +1 is inside the band.
+- `places` holds countries, regions or cities only. A time zone goes in `required_timezone`.
