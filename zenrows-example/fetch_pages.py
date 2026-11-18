@@ -60,7 +60,8 @@ def clean(markdown: str) -> tuple[str, str]:
 
 def posting_id(url: str) -> str:
     """'https://canonical.com/careers/5143074' becomes 'canonical-5143074'."""
-    company = url.split("//")[1].removeprefix("www.").split(".")[0]
+    host = url.split("//")[1].split("/")[0]  # e.g. "careers.airbnb.com"
+    company = host.split(".")[-2]  # the name just before .com, .eu or .jobs
     slug = url.rstrip("/").rsplit("/", 1)[-1].strip("-")
     return f"{company}-{slug}"
 
