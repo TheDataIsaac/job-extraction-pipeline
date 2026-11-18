@@ -3,10 +3,14 @@
 Copied from job-extraction-pipeline's extract.py. The Extractor class is unchanged. The prompt is
 reworded for careers-page postings, and run_batch is trimmed: it still skips postings that are
 already saved, but drops the fingerprint check, which only matters for big reruns.
+
+Run it as `python extract.py`, or give other files: `python extract.py outputs/eval_postings.jsonl
+outputs/eval_extractions.jsonl`.
 """
 
 import asyncio
 import json
+import sys
 from pathlib import Path
 
 from openai import APIConnectionError, APITimeoutError, AsyncOpenAI, RateLimitError
@@ -108,4 +112,9 @@ async def run_batch(postings_file: Path, out_file: Path) -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(run_batch(POSTINGS, EXTRACTIONS))
+    if len(sys.argv) == 1:
+        asyncio.run(run_batch(POSTINGS, EXTRACTIONS))
+    elif len(sys.argv) == 3:
+        asyncio.run(run_batch(Path(sys.argv[1]), Path(sys.argv[2])))
+    else:
+        sys.exit("Usage: python extract.py [postings_file extractions_file]")

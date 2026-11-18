@@ -1,7 +1,12 @@
-"""Fetch each job posting through ZenRows as markdown, clean it, and save it to postings.jsonl."""
+"""Fetch each job posting through ZenRows as markdown, clean it, and save it to postings.jsonl.
+
+Run it as `python fetch_pages.py`, or give other files: `python fetch_pages.py eval_urls.txt
+outputs/eval_postings.jsonl`.
+"""
 
 import json
 import re
+import sys
 from pathlib import Path
 
 import requests
@@ -66,13 +71,13 @@ def posting_id(url: str) -> str:
     return f"{company}-{slug}"
 
 
-def main() -> None:
+def main(urls_file: Path, postings_file: Path) -> None:
     api_key = Settings().zenrows_api_key
-    urls = [line.strip() for line in URLS.read_text().splitlines() if line.startswith("http")]
-    POSTINGS.parent.mkdir(exist_ok=True)
+    urls = [line.strip() for line in urls_file.read_text().splitlines() if line.startswith("http")]
+    postings_file.parent.mkdir(exist_ok=True)
 
     total_credits = 0
-    with POSTINGS.open("w", encoding="utf-8") as out:
+    with postings_file.open("w", encoding="utf-8") as out:
         for url in urls:
             try:
                 # Try a plain fetch first (1 credit). Only pay for a browser (5 credits)
@@ -105,4 +110,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 1:
+        main(URLS, POSTINGS)
+    elif len(sys.argv) == 3:
+        main(Path(sys.argv[1]), Path(sys.argv[2]))
+    else:
+        sys.exit("Usage: python fetch_pages.py [urls_file postings_file]")
