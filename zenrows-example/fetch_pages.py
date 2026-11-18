@@ -90,7 +90,9 @@ def main(urls_file: Path, postings_file: Path) -> None:
                     title, text = clean(markdown)
                     credits += more
             except requests.RequestException as error:
-                print(f"{url} failed: {error}")
+                # Print the error type, not the error: its message holds the request URL,
+                # and that URL has the API key in it.
+                print(f"{url} failed: {type(error).__name__}")
                 continue
 
             posting = {
