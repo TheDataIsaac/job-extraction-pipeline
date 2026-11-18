@@ -1,0 +1,9 @@
+# Postings picked from Canonical's rendered careers page (find_postings.py) and PostHog's public sitemap.
+https://canonical.com/careers/5143074
+https://canonical.com/careers/2614095
+https://canonical.com/careers/6222476
+https://canonical.com/careers/6177794
+https://posthog.com/careers/ai-research-engineer
+https://posthog.com/careers/technical-support-engineer
+https://posthog.com/careers/technical-customer-success-manager-americas
+https://posthog.com/careers/technical-customer-success-manager-emea

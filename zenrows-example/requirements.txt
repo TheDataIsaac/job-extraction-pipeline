@@ -1,0 +1,5 @@
+requests>=2.32
+openai>=1.60
+pydantic>=2.8
+pydantic-settings>=2.4
+tenacity>=9.0
