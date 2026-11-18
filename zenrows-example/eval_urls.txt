@@ -1,0 +1,71 @@
+# Postings for the location evaluation, fetched on 18 November 2026.
+# 50 postings from 8 companies that host jobs on their own careers sites. They were picked to cover
+# the different ways location gets written (worldwide, regions, countries, "City or Remote",
+# office only, time zones). Within each kind, the posting was picked at random from the listing.
+# robots.txt allowed every URL on 18 November 2026.
+
+# Canonical: the four from Part 1, then one per location label on the careers page
+https://canonical.com/careers/5143074
+https://canonical.com/careers/2614095
+https://canonical.com/careers/6222476
+https://canonical.com/careers/6177794
+https://canonical.com/careers/5667860
+https://canonical.com/careers/8249298
+https://canonical.com/careers/5648135
+https://canonical.com/careers/7549144
+https://canonical.com/careers/7836561
+https://canonical.com/careers/7980589
+https://canonical.com/careers/3262042
+
+# PostHog: the four from Part 1, then three more from its sitemap
+https://posthog.com/careers/ai-research-engineer
+https://posthog.com/careers/technical-support-engineer
+https://posthog.com/careers/technical-customer-success-manager-americas
+https://posthog.com/careers/technical-customer-success-manager-emea
+https://posthog.com/careers/site-reliability-engineer-(us-pacific-time)
+https://posthog.com/careers/product-manager-observability-(ex-founder-or-ex-product-engineer)
+https://posthog.com/careers/strategic-finance-analyst
+
+# Atlassian: one per location label ("San Francisco or Remote", "Remote or Remote", ...)
+https://www.atlassian.com/company/careers/details/27203
+https://www.atlassian.com/company/careers/details/27541
+https://www.atlassian.com/company/careers/details/27558
+https://www.atlassian.com/company/careers/details/27390
+https://www.atlassian.com/company/careers/details/25813
+https://www.atlassian.com/company/careers/details/27805
+
+# Airbnb: "Live and Work Anywhere" and "Hybrid" roles
+https://careers.airbnb.com/positions/8351513/
+https://careers.airbnb.com/positions/8306554/
+https://careers.airbnb.com/positions/7834481/
+https://careers.airbnb.com/positions/8357059/
+https://careers.airbnb.com/positions/8336590/
+
+# Shopify
+https://www.shopify.com/careers/applied-machine-learning-engineers_9f16f862-28ec-42d7-a9fa-948bf2eeeb4a
+https://www.shopify.com/careers/engineering-manager-cloud-systems_0c3c9c04-18db-4e02-ab7d-d7bb32ac7bea
+https://www.shopify.com/careers/engineering-manager-shopify-mobile_3e3239d0-7816-437e-bfe4-dcf41ca300e2
+https://www.shopify.com/careers/machine-learning-applied-scientists_731ad829-1800-4964-be1b-e4f44e1f109c
+https://www.shopify.com/careers/senior-engineer-privacy-engineering_420e0fb0-a768-4f05-98d4-d8c575845309
+https://www.shopify.com/careers/senior-engineer-core-mysql-database-platform_741105f5-0820-4dad-9343-48cd80f0e7d2
+
+# Toptal: global roles and their US-only versions
+https://www.toptal.com/careers/client-advisor
+https://www.toptal.com/careers/chief-tech-officer
+https://www.toptal.com/careers/chief-tech-officer-usa
+https://www.toptal.com/careers/enterprise-sales-development-representative
+https://www.toptal.com/careers/enterprise-sales-development-representative-usa
+
+# Bolt
+https://bolt.eu/en/careers/positions/9b174ed7-41bf-4bdb-b443-a329d869de15/
+https://bolt.eu/en/careers/positions/9455cd30-3d10-4b43-b70c-3115b7b12590/
+https://bolt.eu/en/careers/positions/7d104dc7-6c9e-4cdb-9354-c2b4e04d3f28/
+https://bolt.eu/en/careers/positions/853cb9d2-66f4-4145-83aa-7eb8ab844490/
+https://bolt.eu/en/careers/positions/3a45811e-a80a-40c9-ba04-c95b7c84596a/
+
+# Amazon: roles whose location is a whole country or state, and two office roles
+https://www.amazon.jobs/en/jobs/10580447/rn-operations-manager-one-medical-operations-virtual-care-operations
+https://www.amazon.jobs/en/jobs/10522137/sr-construction-manager-wwgs-enterprise-development
+https://www.amazon.jobs/en/jobs/10514229/clinical-quality-pm-one-medical-senior-health
+https://www.amazon.jobs/en/jobs/10503484/content-specialist-ii-digital-studios
+https://www.amazon.jobs/en/jobs/10439538/sw-engineer-virtual-platforms
