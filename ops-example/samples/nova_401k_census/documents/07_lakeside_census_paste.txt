@@ -1,0 +1,5 @@
+Pasted from Lakeside Family Pharmacy's census template (2026 tab), received 18 Nov 2026:
+
+Employee     | DOH        | DOT        | Hours | Comp      | Def %
+Tyler Grant  | 07/21/2026 | 06/30/2026 | 310   | 9,920.00  | 2
+Nadia Petrov | 02/02/2025 |            | 1,804 | 61,200.00 | 8

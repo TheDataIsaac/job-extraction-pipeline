@@ -1,0 +1,7 @@
+﻿reasons,document,record,order_number,order_number_quote,branch,branch_quote,ship_date,ship_date_quote,delivery_date,delivery_date_quote,carrier,carrier_quote,item_count,item_count_quote,status,status_quote,delay_reason,delay_reason_quote,needs_human,needs_human_reason
+item_count is not written in digits in its quote,04_nashville_driver_text.txt,1,48231,Job 48231,Nashville,loaded at Nashville,2026-11-20,20 Nov 2026,2026-11-20,by 2pm,our own truck,in our own truck,26,twenty six cases,shipped,loaded at Nashville,,,False,
+flagged by the model,07_vegas_return_short.eml,1,48102,Job 48102,Las Vegas,Las Vegas branch,,,2026-11-19,today,,,28,28 came back,returned,came back,,,True,Two cases of moving lights are missing and are still being checked with the venue.
+delayed with no reason,10_seattle_running_late.eml,1,48222,48222,Seattle,48222 from Seattle,,,2026-11-21,"new ETA tomorrow
+10am",,,,,delayed,running late,,,False,
+shipped with no item count; flagged by the model,11_nashville_bol_attached.eml,1,48226,Job 48226,Nashville,from Nashville,2026-11-20,this afternoon,2026-11-23,Delivery Monday,Northstar LTL,with Northstar LTL,,,shipped,shipped,,,True,Piece count is only in the missing attachment.
+delivery date before ship date; flagged by the model,12_toronto_ops_log.txt,1,48199,Job 48199,Toronto,Toronto branch,2026-11-18,shipped: 2026-11-18,2026-11-17,delivered: 2026-11-17,Ridgeway Freight,carrier: Ridgeway Freight,40,pieces: 40,delivered,status: delivered,,,True,The delivery date precedes the ship date.

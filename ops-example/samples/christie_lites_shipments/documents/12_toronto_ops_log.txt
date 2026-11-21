@@ -1,0 +1,4 @@
+Ops log export - Toronto branch - week of 16 Nov 2026
+
+Job 48199 | status: delivered | shipped: 2026-11-18 | delivered: 2026-11-17 | carrier: Ridgeway Freight | pieces: 40
+Job 48203 | status: delivered | shipped: 2026-11-16 | delivered: 2026-11-18 | carrier: own truck | pieces: 9
