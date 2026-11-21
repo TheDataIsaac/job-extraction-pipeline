@@ -58,6 +58,13 @@ from them and cites each by number. It sees 8 postings, not all 8,595, so it des
 the analysis step does that. Extracted facts that failed a check are left out, so the model reads that posting's own
 text instead.
 
+## Other examples
+
+* [zenrows-example](zenrows-example/) applies the same extraction and checks to company careers
+  pages, and scores whether someone living in Nigeria could apply.
+* [ops-example](ops-example/) turns made-up operations emails (payroll changes, 401(k) census data,
+  shipment updates) into checked records, with a review list for anything that doesn't add up.
+
 ## Limits
 
 * The checks prove a quote exists in the text, not that the model understood it correctly. I did
