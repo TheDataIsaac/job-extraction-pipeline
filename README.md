@@ -18,6 +18,7 @@ raw CSV --prepare--> postings.jsonl --extract--> extractions.jsonl --analyze--> 
 | `schema.py` | The shape of the answer: project type, tools, experience level, deadline, budget, red flags. The model must fill this in. |
 | `prepare.py` | Fixes broken characters and removes exact duplicate postings. |
 | `extract.py` | Sends each posting to the model, 10 at a time, retries temporary errors, and saves each result as it arrives so a stopped run can resume. A posting is redone if its text, the model, the prompt or the schema has changed, and the old result moves to `extractions.old.jsonl`. Results saved before this check was added stay as they are. |
+| `batch.py` | The same extraction through OpenAI's Batch API: upload every request in one file and collect the answers later, at half the price. |
 | `verify.py` | Checks every claim against the posting. No second model call. |
 | `analyze.py` | Counts and charts the results. |
 | `api.py` | A small FastAPI service: `POST /extract` with one posting. |
@@ -50,6 +51,25 @@ uv run jobs ask "What do clients want when they ask for a Power BI dashboard?"
 `notebooks/try_it.ipynb` walks through all of it step by step. It shows real postings, so clear its outputs before sharing it.
 
 A full run is about 8 million tokens and takes about 40 minutes.
+
+## Half price with the Batch API
+
+Nobody waits for these answers, so there's no reason to pay for fast replies. OpenAI's Batch API
+takes a file of requests, works through it within 24 hours and charges half the normal price.
+
+```bash
+uv run jobs extract --batch --limit 20   # upload the requests and start a batch
+uv run jobs collect                      # check on it; once it's done, save the results
+```
+
+`batch.py` sends exactly the same request as a normal run (same model, prompt and schema), so
+results from either way have the same fingerprint, go through the same checks and land in the
+same `extractions.jsonl`.
+
+On 40 postings, a batch used the same tokens as a normal run for half the cost ($0.0059
+against $0.0119) and finished in 3.5 minutes instead of 12 seconds. Its answers differed from
+the saved run about as much as a fresh normal run does, since the model isn't fully repeatable
+either way.
 
 ## Asking questions (RAG)
 

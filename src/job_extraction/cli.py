@@ -1,4 +1,4 @@
-"""Command line entry point: jobs prepare, extract, analyze, index, ask, serve."""
+"""Command line entry point: jobs prepare, extract, collect, analyze, index, ask, serve."""
 
 import asyncio
 from pathlib import Path
@@ -22,11 +22,28 @@ def prepare() -> None:
 
 
 @app.command()
-def extract(limit: int = typer.Option(None, help="Only process the first N postings.")) -> None:
+def extract(
+    limit: int = typer.Option(None, help="Only process the first N postings."),
+    batch: bool = typer.Option(False, help="Use the Batch API: half price, results within 24h."),
+) -> None:
     """Extract structured data with the model. Safe to stop and run again."""
+    if batch:
+        from job_extraction.batch import submit
+
+        submit(POSTINGS, EXTRACTIONS, limit)
+        return
+
     from job_extraction.extract import run_batch
 
     asyncio.run(run_batch(POSTINGS, EXTRACTIONS, limit))
+
+
+@app.command()
+def collect() -> None:
+    """Check on a Batch API run, and save its results once it has finished."""
+    from job_extraction.batch import collect as run
+
+    run(POSTINGS, EXTRACTIONS)
 
 
 @app.command()

@@ -41,6 +41,14 @@ RETRYABLE = (APIConnectionError, APITimeoutError, RateLimitError)
 SCHEMA = json.dumps(JobExtraction.model_json_schema(), sort_keys=True)
 
 
+def messages(title: str, description: str) -> list[dict]:
+    """What the model is sent for one posting. The batch run (batch.py) sends the same."""
+    return [
+        {"role": "system", "content": PROMPT},
+        {"role": "user", "content": f"Title: {title}\n\n{description}"},
+    ]
+
+
 class EmptyReply(Exception):
     """The model answered but gave no usable data, for example because it refused."""
 
@@ -62,10 +70,7 @@ class Extractor:
             response = await self.client.responses.parse(
                 model=self.model,
                 reasoning={"effort": "none"},
-                input=[
-                    {"role": "system", "content": PROMPT},
-                    {"role": "user", "content": f"Title: {title}\n\n{description}"},
-                ],
+                input=messages(title, description),
                 text_format=JobExtraction,
             )
         if response.output_parsed is None:
@@ -77,6 +82,17 @@ def fingerprint(model: str, posting: dict) -> str:
     """A code that changes when the posting, model, prompt or schema changes."""
     parts = [model, PROMPT, SCHEMA, posting["title"], posting["description"]]
     return hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()
+
+
+def to_record(posting: dict, fingerprint: str, data: JobExtraction, tokens: int) -> dict:
+    """One line of extractions.jsonl: the data, plus any problems the checks found in it."""
+    return {
+        "id": posting["id"],
+        "fingerprint": fingerprint,
+        "tokens": tokens,
+        "problems": check(data, posting["title"] + " " + posting["description"]),
+        "data": data.model_dump(mode="json"),
+    }
 
 
 def drop_stale(out_file: Path, fingerprints: dict[str, str]) -> set[str]:
@@ -135,13 +151,7 @@ async def run_batch(postings_file: Path, out_file: Path, limit: int | None) -> N
         except Exception as error:  # noqa: BLE001 - one bad posting should not stop the whole run
             print(f"{posting['id']} failed: {type(error).__name__}")
             return
-        record = {
-            "id": posting["id"],
-            "fingerprint": fingerprints[posting["id"]],
-            "tokens": tokens,
-            "problems": check(data, posting["title"] + " " + posting["description"]),
-            "data": data.model_dump(mode="json"),
-        }
+        record = to_record(posting, fingerprints[posting["id"]], data, tokens)
         out.write(json.dumps(record, ensure_ascii=False) + "\n")
         out.flush()
 
